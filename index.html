@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Just Something I Wanted to Ask…</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, #ffe3ec, #ffffff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.card {
+  background: white;
+  padding: 35px 25px;
+  border-radius: 30px;
+  box-shadow: 0 20px 40px rgba(255, 77, 109, 0.25);
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+}
+
+.bear img {
+  width: 170px;
+  animation: bounce 2.5s infinite ease-in-out;
+}
+
+@keyframes bounce {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+input {
+  width: 90%;
+  padding: 12px;
+  border-radius: 20px;
+  border: 2px solid #ffd6df;
+  font-size: 16px;
+  outline: none;
+}
+
+.shake {
+  animation: shake 0.35s;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+button {
+  margin: 10px;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(135deg, #ff4d6d, #ff8fa3);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.noBtn {
+  background: #ddd;
+  color: #333;
+}
+
+.heart {
+  position: fixed;
+  font-size: 18px;
+  pointer-events: none;
+  animation: pop 1.6s ease-out forwards;
+}
+
+@keyframes pop {
+  0% { transform: scale(0); opacity: 1; }
+  30% { transform: scale(1.3); }
+  100% {
+    transform: translateY(-80px) rotate(20deg) scale(0.7);
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="box">
+  <div class="bear">
+    <img src="bear.jpg">
+  </div>
+  <h2>Hey… I wanted to ask you something 💗</h2>
+  <button onclick="start()">Start</button>
+</div>
+
+<audio id="bgMusic">
+  <source src="teenage-dream.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const box = document.getElementById("box");
+const music = document.getElementById("bgMusic");
+
+let step = 0;
+
+const questions = [
+  {
+    q: "When was the first time I told nee azhaga eruka?",
+    a: ["batch party"],
+    reply: "Nee azhaga eruka was just about how you looked it was my emotion my feelings and expressing how I felt for you even afer I have told you before but not with the context like then. My heart was slowly beating slowly gaining speed as I was trying to tell you with each moment passed I felt I wouldnt get the chance to tell you but I manned up and told what I wanted the whole night and now I get to tell that to you everytime I see you or even think of you eventhough you are my girlfriend my heart doesnt slow down it always runs when you are around💕"
+  },
+  {
+    q: "Where did we hold hands for the first time?",
+    a: ["pheniox", "mall"],
+    reply: "The day I waited for ever since we got together the chance to hold your hand and not let it go.the yearning to hold your hand in VR when all of our friends held yours I was standing there looking at you thinking when will be mine and when I held your hand I felt safe and I never wanted to let go off your hand.that moment replays in my heart again and again I miss holding your hand and I wont let go off your hand ever.our hands were sweaty when we first held each others hand but we didnt want to let go but it was so cute. I will always be there in your life and be there for you. that moment changed my life and made me feel safe even when I was the one covering your hand.💕"
+  },
+  {
+    q: "What is our OG date spot?",
+    a: ["grounded"],
+    reply: "Never thought I would get to go on a date with you early on but when the moment came it was surreal I couldnt beleive I was there with you going on a date.I still remember the first ever date that we had in ground the first of many dates.that place has a special place in my heart being there with and yapping about our day and talking about our day and being cute.No matter what you are the place I want to be I want to be around you no matter where that is it is a date for me.its you no the place and always it is you that will make me race and run to see you.💕"
+  }
+];
+
+function start() {
+  showQuestion();
+}
+
+function typeText(el, text, i = 0) {
+  el.innerHTML = "";
+  const t = setInterval(() => {
+    el.innerHTML += text[i];
+    i++;
+    if (i >= text.length) clearInterval(t);
+  }, 30);
+}
+
+function showQuestion() {
+  box.innerHTML = `
+    <div class="bear"><img src="bear.jpg"></div>
+    <h2 id="q"></h2>
+    <input id="ans" placeholder="Type your answer…" />
+    <button onclick="check()">Submit</button>
+  `;
+  typeText(document.getElementById("q"), questions[step].q);
+}
+
+function check() {
+  const input = document.getElementById("ans");
+  const val = input.value.trim().toLowerCase();
+
+  if (!questions[step].a.includes(val)) {
+    input.classList.add("shake");
+    input.value = "";
+    setTimeout(() => input.classList.remove("shake"), 400);
+    return;
+  }
+
+  burstHearts(20);
+
+  box.innerHTML = `
+    <div class="bear"><img src="bear.jpg"></div>
+    <p id="reply"></p>
+    <button onclick="next()">Continue ❤️</button>
+  `;
+
+  typeText(document.getElementById("reply"), questions[step].reply);
+}
+
+function next() {
+  step++;
+  if (step < questions.length) {
+    showQuestion();
+  } else {
+    finalQuestion();
+  }
+}
+
+/* FINAL YES / NO QUESTION */
+function finalQuestion() {
+  box.innerHTML = `
+    <div class="bear"><img src="bear.jpg"></div>
+    <h2>Will you be my Valentine? ❤️</h2>
+    <button onclick="yes()">Yes 💖</button>
+    <button class="noBtn" onclick="no()">No</button>
+  `;
+}
+
+function no() {
+  burstHearts(15);
+  box.innerHTML = `
+    <div class="bear"><img src="bear.jpg"></div>
+    <p>Pretty please🐻💗</p>
+    <button onclick="finalQuestion()">Ask again</button>
+  `;
+}
+
+function yes() {
+  music.volume = 0;
+  music.play();
+  fadeInMusic();
+  burstHearts(70);
+
+  box.innerHTML = `
+    <img src="bear_top.jpg" style="width:160px;">
+    <p id="finalText"></p>
+    <img src="bear_bottom.jpg" style="width:160px; margin-top:15px;">
+  `;
+
+  typeText(
+    document.getElementById("finalText"),
+    "Ananya this is not the best time but no matter what you are the love of my life.I shouldve asked you sooner but here I am i maybe late but I will always ask you to be my valentine cause u are my person the person that I would do anything for you just make feel the best and bring the best version of me. when I realised I liked u I kept telling I was delulu it is not real but as time went I knew what it really was I found love real love when I was trying to stay away but when I liked u you changed my world upside down and I knew it was love and I wasnt ready to let you go. I never did I tried no matter what anyone said you are the woman that stole my heart. it has been a rollcoaster ever since the time you told you liked me. I havent stopped thinking about and my heart filled with u everywhere you made me realise how it felt to be love another than my family how it felt to be vulnerable and having a person there for me with whom I can talk about anything no matter what. U have gone through a lot for me and I will give you all my love and drown you in love like those hearts popping up in this page. I am saynig this with all my heart and I will make u feel the most loved woman ever. I want to see your gorgeous smile on your face everytime you are with me I just want to be there with the woman I love. we havent been meeting much due to our circumstances but there isnt a moment in time where I wouldnt throw everything to come and meet you.I know I already asked this question before,Ananyashrinidhi Karthisathasivan will you be my valentine?❤️"
+  );
+}
+
+function fadeInMusic() {
+  let v = 0;
+  const i = setInterval(() => {
+    v += 0.05;
+    music.volume = Math.min(v, 0.6);
+    if (v >= 0.6) clearInterval(i);
+  }, 200);
+}
+
+function burstHearts(n) {
+  for (let i = 0; i < n; i++) {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerText = "❤️";
+    h.style.left = Math.random() * window.innerWidth + "px";
+    h.style.top = Math.random() * window.innerHeight + "px";
+    h.style.fontSize = 14 + Math.random() * 18 + "px";
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 1600);
+  }
+}
+</script>
+
+</body>
+</html>
